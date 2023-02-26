@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Registration Page</title>
+        <link rel="shortcut icon" href="/assets/photo/Logo.ico" />
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="responsive.css">
+        <script src="Script.js"></script>
+        <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" data-auto-replace-svg></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width-device-width, initial-scale = 1.0">
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-NW84GEMEGH"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-NW84GEMEGH');
+        </script>
+    </head>
+    <body >
+        <div class="container">
+            <div class="regis-header">
+                <img src="/assets/photo/Logo.png" height="30px">
+                <div class="title">Event Registration</div>
+                <a href="/index.html" class="close-button">&times;</a>
+            </div>
+            <div class="registration">
+                <div class="poster">
+                    <div class="inside-poster">
+                        <h1>Metode Pembayaran</h1>
+                        <div class="payment-pict">
+                            <img src="/assets/photo/shopee.png">
+                            <img src="/assets/photo/ovo.png">
+                            <img class="bank" src="/assets/photo/bni.png">
+                        </div>
+                    </div>
+                </div>
+                <div class="left-body">
+                    <div class="form">
+                        <form name="database" id="database" method="post"  autocomplete="off" >  
+                            <h1>Register</h1>
+                            <div class="success active" id="form-success" >
+                                <p class="success-text">
+                                    <strong>Selamat,</strong> Anda telah terdaftar<br>
+                                    Silahkan begabung ke dalam grup telegram <a id="grup-tele" href="https://t.me/joinchat/x9NWhCc5sP5mNzE1" target="_blank">klik disini</a>
+                                </p>
+                            </div>                        
+                            <section>
+                                <i class="fas fa-user" id="fas"></i>
+                                <input type="text" name="username" id="username" oninvalid="('Please input your name correctly.')" placeholder="Nama"required/>
+                            </section>
+                            <section>
+                                <i class="fas fa-graduation-cap" id="fas"></i>
+                                <input type="text" name="school" id="school" placeholder="Asal Sekolah"required/>
+                            </section>
+                            <section>
+                                <i class="fas fa-envelope"id="fas"></i>
+                                <input type="email" name="email" id="email"  
+                                placeholder="Alamat Email"required/>
+                            </section>
+                            <section>
+                                <i class="fas fa-phone-square-alt"id="fas" ></i>
+                                <input type="tel" minlength="11" name="phone" id="phone" onkeypress="return onlyNumber(event)" pattern="\+?([ -]?\d+)+|\(\d+\)([ -]\d+)" class="noscroll" placeholder="No HP " required/>
+                            </section>
+                            <div class="prove">Metode Pembayaran</div>
+                            <section id="prove">
+                                <!-- option select -->
+                                <select name="payment" id="payment" required>
+                                    <option value="" >-- Pilih Satu --</option>
+                                    <option value="ovo">OVO</option>
+                                    <option value="shopeepay">Shopeepay</option>
+                                    <option value="bni">Bank BNI</option>
+                                </select>
+                            </section>
+                            <div class="prove">Bukti Transfer</div>
+                            <section id="prove">
+                                <input type="file" name="filename" id="bukti" onchange="LoadFile(event)"accept="image/gif,image/png, image/jpg, image/jpeg" required/>
+                                <input type="hidden" id="fileData" name="fileData" />
+                                <input type="hidden" id="mimeType" name="mimeType" />
+                                <input type="hidden" id="fileName" name="fileName" />
+                            </section>
+                            <section>
+                                <button class="submit" type="submit" name="submit" id="submit">Submit</button>  
+                                <div class="lds-dual-ring loading active"></div>
+                            </section>
+                        </form>
+                    </div>
+                </div>              
+            </div> 
+        </div>
+
+        <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycby2TOcaNF696qIlzrYfRmp1XsIPEwlv3Ox_uusX_HC4C9NJLlDg1mWzdGhGD-VsLoARiw/exec';
+        const form = document.forms['database']
+        const btnKirim = document.querySelector('.submit');
+        const btnLoading = document.querySelector('.loading');
+        const success = document.querySelector('.success');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault()
+            btnKirim.classList.toggle('active')
+            btnLoading.classList.toggle('active')
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => {
+                    success.classList.toggle('active');
+                    btnKirim.classList.toggle('active');
+                    btnLoading.classList.toggle('active');
+                    form.reset();
+                })
+                .catch(error => console.error('Error!', error.message))
+        })
+
+                function LoadFile(event)
+                {
+                    var file = event.target.files[0];
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        console.log(e.target.result);
+                        var fileData = e.target.result.substr(e.target.result.indexOf(",")+1);
+                        var mimeTypeStart = e.target.result.indexOf("data:") + 5;
+                        var mimeTypeEnd = e.target.result.indexOf(";");
+                        var mimeType = e.target.result.substr(mimeTypeStart, mimeTypeEnd - mimeTypeStart);
+                        var fileName = file.name;
+                        document.getElementById("fileData").value = fileData;
+                        document.getElementById("mimeType").value = mimeType;
+                        document.getElementById("fileName").value = fileName;
+                    };    
+                    reader.readAsDataURL(file);
+                }
+
+        </script>
+        
+    </body>
+</html>
